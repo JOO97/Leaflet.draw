@@ -5,24 +5,24 @@
  */
 L.Draw.Circle = L.Draw.SimpleShape.extend({
 	statics: {
-		TYPE: 'circle'
+		TYPE: "circle",
 	},
 
 	options: {
 		shapeOptions: {
 			stroke: true,
-			color: '#3388ff',
+			color: "#3388ff",
 			weight: 4,
 			opacity: 0.5,
 			fill: true,
 			fillColor: null, //same as color by default
 			fillOpacity: 0.2,
-			clickable: true
+			clickable: true,
 		},
 		showRadius: true,
 		metric: true, // Whether to use the metric measurement system or imperial
 		feet: true, // When not metric, use feet instead of yards for display
-		nautic: false // When not metric, not feet use nautic mile for display
+		nautic: false, // When not metric, not feet use nautic mile for display
 	},
 
 	// @method initialize(): void
@@ -44,7 +44,11 @@ L.Draw.Circle = L.Draw.SimpleShape.extend({
 		}
 
 		if (!this._shape) {
-			this._shape = new L.Circle(this._startLatLng, distance, this.options.shapeOptions);
+			this._shape = new L.Circle(
+				this._startLatLng,
+				distance,
+				this.options.shapeOptions
+			);
 			this._map.addLayer(this._shape);
 		} else {
 			this._shape.setRadius(distance);
@@ -52,7 +56,12 @@ L.Draw.Circle = L.Draw.SimpleShape.extend({
 	},
 
 	_fireCreatedEvent: function () {
-		var circle = new L.Circle(this._startLatLng, this._shape.getRadius(), this.options.shapeOptions);
+		var circle = new L.Circle(
+			this._startLatLng,
+			this._shape.getRadius(),
+			this.options.shapeOptions
+		);
+		console.log("circle", circle);
 		L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, circle);
 	},
 
@@ -69,15 +78,22 @@ L.Draw.Circle = L.Draw.SimpleShape.extend({
 			// Get the new radius (rounded to 1 dp)
 			radius = this._shape.getRadius().toFixed(1);
 
-			var subtext = '';
+			var subtext = "";
 			if (showRadius) {
-				subtext = L.drawLocal.draw.handlers.circle.radius + ': ' +
-					L.GeometryUtil.readableDistance(radius, useMetric, this.options.feet, this.options.nautic);
+				subtext =
+					L.drawLocal.draw.handlers.circle.radius +
+					": " +
+					L.GeometryUtil.readableDistance(
+						radius,
+						useMetric,
+						this.options.feet,
+						this.options.nautic
+					);
 			}
 			this._tooltip.updateContent({
 				text: this._endLabelText,
-				subtext: subtext
+				subtext: subtext,
 			});
 		}
-	}
+	},
 });
