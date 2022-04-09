@@ -3,12 +3,23 @@
 	<head>
 		<title>Leaflet.draw vector editing handlers</title>
 
-		<script src="libs/leaflet-src.js"></script>
-		<link rel="stylesheet" href="libs/leaflet.css" />
+		<!-- <script src="libs/leaflet-src.js"></script>
+		<link rel="stylesheet" href="libs/leaflet.css" /> -->
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+		/>
+		<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
 
 		<script src="../../src/Leaflet.draw.js"></script>
 		<script src="../../src/Leaflet.Draw.Event.js"></script>
 		<link rel="stylesheet" href="../../src/leaflet.draw.css" />
+		<!-- Mapbox GL -->
+		<link
+			href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css"
+			rel="stylesheet"
+		/>
+		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js"></script>
 
 		<script src="../../src/Toolbar.js"></script>
 		<script src="../../src/Tooltip.js"></script>
@@ -49,6 +60,8 @@
 			style="width: 800px; height: 600px; border: 1px solid #ccc"
 		></div>
 
+		<script src="./libs/leaflet-mapbox-gl.js"></script>
+
 		<script>
 			// osm
 			const osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -57,6 +70,8 @@
 			const osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib })
 
 			//mapbox
+			const accessToken =
+				'pk.eyJ1Ijoiam9vOTciLCJhIjoiY2wxcnZiN2F4MXl2MDNkbzJtc291OHkycSJ9.h2k1DKUqc70KqtoFLQC8ng'
 			let mapbox = L.tileLayer(
 				'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
 				{
@@ -66,15 +81,21 @@
 					id: 'mapbox/streets-v11',
 					tileSize: 512,
 					zoomOffset: -1,
-					accessToken:
-						'sk.eyJ1Ijoiam9vOTciLCJhIjoiY2wxcjkwbmYwMGs2eTNtbzMwaWRwZHlvNCJ9.r3H6pFW0nwJzzSCAL5iIMw'
+					accessToken
 				}
 			)
+			console.log(L)
 
+			//mapbox-gl
+			const gl = L.mapboxGL({
+				accessToken,
+				style: 'mapbox://styles/mapbox/bright-v8'
+			})
 			//create map
 			const map = new L.Map('map', {
-				center: new L.LatLng(51.505, -0.04),
-				zoom: 13
+				// center: new L.LatLng(51.505, -0.04),
+				center: [24.46, 118.1],
+				zoom: 11
 			})
 			const drawnItems = L.featureGroup().addTo(map)
 
@@ -83,6 +104,7 @@
 					{
 						osm: osm.addTo(map),
 						mapbox: mapbox.addTo(map),
+						mapboxGL: gl.addTo(map),
 						google: L.tileLayer(
 							'http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}',
 							{
