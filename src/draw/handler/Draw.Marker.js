@@ -93,6 +93,7 @@ L.Draw.Marker = L.Draw.Feature.extend({
 	},
 
 	_createMarker: function (latlng) {
+		console.log('marker', this.options)
 		return new L.Marker(latlng, {
 			icon: this.options.icon,
 			zIndexOffset: this.options.zIndexOffset
